@@ -7,10 +7,41 @@ from test_framework.test_failure import TestFailure
 from test_framework.test_utils import enable_executor_hook
 
 
-def even_odd(A: List[int]) -> None:
-    # TODO - you fill in here.
+def even_odd1(A: List[int]) -> None:
+
+    if A is not None:
+        even_idx, odd_idx = 0, len(A) - 1
+
+        while even_idx < odd_idx:
+            while even_idx < len(A) and A[even_idx] % 2 == 0:
+                even_idx += 1
+
+            while odd_idx >= 0 and A[odd_idx] % 2 == 1:
+                odd_idx -= 1
+
+            if even_idx < odd_idx: # swapping
+                # temp = A[even_idx]
+                # A[even_idx] = A[odd_idx]
+                # A[odd_idx] = temp
+                A[even_idx], A[odd_idx] = A[odd_idx], A[even_idx]
+                even_idx += 1
+                odd_idx -= 1
+
     return
 
+
+def even_odd(A: List[int]) -> None:
+
+    if A is not None:
+        even_idx, odd_idx = 0, len(A) - 1
+
+        while even_idx < odd_idx:
+            if A[even_idx] % 2 == 0:
+                even_idx += 1
+            else:
+                A[even_idx], A[odd_idx] = A[odd_idx], A[even_idx]
+                odd_idx -= 1
+    return
 
 @enable_executor_hook
 def even_odd_wrapper(executor, A):
