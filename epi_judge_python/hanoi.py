@@ -5,12 +5,44 @@ from test_framework import generic_test
 from test_framework.test_failure import TestFailure
 from test_framework.test_utils import enable_executor_hook
 
+from collections import namedtuple
+
+
 NUM_PEGS = 3
 
 
+# recursive
+def compute_tower_hanoi1(num_rings: int) -> List[List[int]]:
+
+    def move_rings(rings: int, src: int, dst: int, spare: int) -> List[List[int]]:
+        steps = []
+        if rings == 1:
+            return [(src, dst)]
+        else:
+            steps.extend(move_rings(rings-1, src, spare, dst))
+            steps.append((src, dst))
+            steps.extend(move_rings(rings-1, spare, dst, src))
+        return steps
+
+    return move_rings(num_rings, 0, 1, 2)
+
+
+# 15.1 variant iterative
 def compute_tower_hanoi(num_rings: int) -> List[List[int]]:
-    # TODO - you fill in here.
-    return []
+
+    StackElement = namedtuple("StackElement", ["count", "src", "dst", "temp"])
+
+    stack = [StackElement(count=num_rings, src=0, dst=1, temp=2)]
+    steps = []
+    while stack:
+        element = stack.pop()
+        if element.count == 1:
+            steps.append((element.src, element.dst))
+        else:
+            stack.append(StackElement(element.count - 1, element.temp, element.dst, element.src))
+            stack.append(StackElement(1, element.src, element.dst, element.temp))
+            stack.append(StackElement(element.count - 1, element.src, element.temp, element.dst))
+    return steps
 
 
 @enable_executor_hook
